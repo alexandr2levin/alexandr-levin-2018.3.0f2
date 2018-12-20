@@ -1,8 +1,8 @@
-using Game.Gameplay.World;
+using Game.Gameplay.World.Ball;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Gameplay
+namespace Game.Gameplay.World
 {
     public class WorldInstaller : MonoInstaller
     {
@@ -12,7 +12,7 @@ namespace Game.Gameplay
         
         public override void InstallBindings()
         {
-            Container.BindMemoryPool<Ball, Ball.Pool>()
+            Container.BindMemoryPool<BallController, BallController.Pool>()
                 .WithInitialSize(10)
                 .FromComponentInNewPrefab(BallPrefab)
                 .UnderTransform(WorldTransform);

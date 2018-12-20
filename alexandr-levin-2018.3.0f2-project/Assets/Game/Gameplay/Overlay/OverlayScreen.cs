@@ -95,7 +95,7 @@ namespace Game.Gameplay.Overlay
         }
 
         // called from Animation by Animation Event
-        private void FadeOutAnimationFinished()
+        private void FinishTransitionToRestart()
         {
             _router.ResetCurrentScene();
         }

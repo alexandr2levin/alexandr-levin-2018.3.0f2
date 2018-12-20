@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Game.Gameplay.World.Ball;
 using Game.Utils;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
@@ -15,8 +16,8 @@ namespace Game.Gameplay.World
 
         public Color[] BallColors;
         
-        private Ball.Pool _pool;
-        private List<Ball> _activeBalls = new List<Ball>();
+        private BallController.Pool _pool;
+        private List<BallController> _activeBalls = new List<BallController>();
 
         private Bounds _worldBounds;
         private bool _resumed = false;
@@ -31,7 +32,7 @@ namespace Game.Gameplay.World
         }
 
         [Inject]
-        public void InjectDependencies(Ball.Pool pool, GameSession gameSession)
+        public void InjectDependencies(BallController.Pool pool, GameSession gameSession)
         {
             _pool = pool;
             _pool.InactiveItems.ToList()
@@ -55,7 +56,7 @@ namespace Game.Gameplay.World
 
             var color = BallColors[Random.Range(0, BallColors.Length - 1)]; // Random.ColorHSV() also works
             
-            var ball = _pool.Spawn(new Ball.Args(ballSize, price, color));
+            var ball = _pool.Spawn(new BallController.Args(ballSize, price, color));
 
             var worldEdgesOffset = ball.Bounds.size.x / 2;
             var xPos = Random.Range(_worldBounds.min.x + worldEdgesOffset, _worldBounds.max.x - worldEdgesOffset);
@@ -74,7 +75,7 @@ namespace Game.Gameplay.World
                 .ForEach(DespawnBall);
         }
 
-        private void DespawnBall(Ball ball)
+        private void DespawnBall(BallController ball)
         {
             _pool.Despawn(ball);
             _activeBalls.Remove(ball);
@@ -88,10 +89,10 @@ namespace Game.Gameplay.World
         private void ResumeSpawning()
         {
             _resumed = true;
-            StartCoroutine(StartSpawningCoroutine());
+            StartCoroutine(SpawnLoopCoroutine());
         }
 
-        private IEnumerator StartSpawningCoroutine()
+        private IEnumerator SpawnLoopCoroutine()
         {
             while (_resumed)
             {

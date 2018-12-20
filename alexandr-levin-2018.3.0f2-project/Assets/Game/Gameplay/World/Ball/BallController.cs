@@ -3,22 +3,29 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Zenject;
 
-namespace Game.Gameplay.World
+namespace Game.Gameplay.World.Ball
 {
     [RequireComponent(typeof(Animator))]
-    public class Ball : MonoBehaviour, IPointerClickHandler
+    public class BallController : MonoBehaviour, IPointerClickHandler
     {
 
-        public event Action<Ball> OnExploded;
-        public Bounds Bounds => _renderer.bounds;
+        public event Action<BallController> OnExploded;
 
-        public float Size;
-        public int Price;
-        [Space(5)]
+        public Bounds Bounds
+        {
+            get
+            {
+                var bounds = _renderer.bounds;
+                bounds.Encapsulate(TailSpriteRenderer.bounds);
+                return bounds;
+            }
+        }
+
         public float BaseSpeed;
-        [Space(10)] 
         public SpriteRenderer TailSpriteRenderer;
 
+        private float _size;
+        private int _price;
         private float _initialBaseSpeed;
 
         private GameSession _session;
@@ -47,7 +54,7 @@ namespace Game.Gameplay.World
         {
             if (!_isDead)
             {
-                var sizeFactor = Size * 0.8f;
+                var sizeFactor = _size * 0.8f;
                 var movementVector = (Vector3.up * BaseSpeed) + (Vector3.up / sizeFactor);
                 transform.position += movementVector * Time.deltaTime;
             }
@@ -80,10 +87,10 @@ namespace Game.Gameplay.World
             {
                 throw new ArgumentException("Args.size must be bigger than 0");
             }
-            Size = args.Size;
-            Price = args.Price;
+            _size = args.Size;
+            _price = args.Price;
             
-            transform.localScale = new Vector3(Size, Size, Size);
+            transform.localScale = new Vector3(_size, _size, _size);
             _renderer.color = args.Color;
             TailSpriteRenderer.color = args.Color;
         }
@@ -98,7 +105,7 @@ namespace Game.Gameplay.World
             if (_isDead) return;
             _isDead = true;
             _animator.SetTrigger("explode");
-            _session.ChangeScore(Price);
+            _session.ChangeScore(_price);
         }
 
         // called from Animation by Animation Event
@@ -107,14 +114,14 @@ namespace Game.Gameplay.World
             OnExploded?.Invoke(this);
         }
         
-        public class Pool : MonoMemoryPool<Args, Ball>
+        public class Pool : MonoMemoryPool<Args, BallController>
         {
-            protected override void Reinitialize(Args args, Ball ball)
+            protected override void Reinitialize(Args args, BallController ball)
             {
                 ball.OnSpawned(args);
             }
 
-            protected override void OnDespawned(Ball ball)
+            protected override void OnDespawned(BallController ball)
             {
                 ball.OnDespawned();
                 base.OnDespawned(ball);

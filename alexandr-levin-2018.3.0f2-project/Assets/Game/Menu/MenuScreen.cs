@@ -27,15 +27,16 @@ namespace Game.Menu
         private void Awake()
         {
             _animator = GetComponent<Animator>();
-            PlayButton.onClick.AddListener(ToGameplay);
+            PlayButton.onClick.AddListener(StartTransitionToGameplay);
         }
 
-        private void ToGameplay()
+        private void StartTransitionToGameplay()
         {
             _animator.SetTrigger("to_gameplay");
         }
 
-        private void FinishToGameplay()
+        // called from Animation by Animation Event
+        private void FinishTransitionToGameplay()
         {
             _router.ToGameplay();
         }
