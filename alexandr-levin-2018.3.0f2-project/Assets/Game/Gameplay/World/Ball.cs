@@ -16,6 +16,8 @@ namespace Game.Gameplay.World
         public int Price;
         [Space(5)]
         public float BaseSpeed;
+        [Space(10)] 
+        public SpriteRenderer TailSpriteRenderer;
 
         private float _initialBaseSpeed;
 
@@ -45,7 +47,8 @@ namespace Game.Gameplay.World
         {
             if (!_isDead)
             {
-                var movementVector = (Vector3.up * BaseSpeed) + (Vector3.up / Size);
+                var sizeFactor = Size * 0.8f;
+                var movementVector = (Vector3.up * BaseSpeed) + (Vector3.up / sizeFactor);
                 transform.position += movementVector * Time.deltaTime;
             }
         }
@@ -82,6 +85,7 @@ namespace Game.Gameplay.World
             
             transform.localScale = new Vector3(Size, Size, Size);
             _renderer.color = args.Color;
+            TailSpriteRenderer.color = args.Color;
         }
 
         private void UpdateBaseSpeedByTimerProgress(float progress)

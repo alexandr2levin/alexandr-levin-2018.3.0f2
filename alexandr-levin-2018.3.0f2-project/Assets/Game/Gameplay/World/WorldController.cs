@@ -19,7 +19,7 @@ namespace Game.Gameplay.World
         private List<Ball> _activeBalls = new List<Ball>();
 
         private Bounds _worldBounds;
-        private bool resumed = false;
+        private bool _resumed = false;
 
         private GameSession _gameSession;
 
@@ -42,11 +42,11 @@ namespace Game.Gameplay.World
         
         public void SpawnBall()
         {
-            var ballSize = Random.Range(0.8f, 1.6f);
+            var ballSize = Random.Range(0.5f, 1.5f);
             var price = 2;
-            if (ballSize <= 1f) price += 1;
-            if (ballSize > 1f && ballSize <= 1.2f) { /* do nothing */ }
-            if (ballSize > 1.2f && ballSize <= 1.6f) price -= 1;
+            if (ballSize >= 0.5f && ballSize <= 0.8f) price += 1;
+            if (ballSize > 0.8f && ballSize <= 1.2f) { /* do nothing */ }
+            if (ballSize > 1.2f && ballSize <= 1.5f) price -= 1;
 
             if (BallColors.Length == 0)
             {
@@ -64,7 +64,6 @@ namespace Game.Gameplay.World
             ball.transform.localPosition = position;
             
             _activeBalls.Add(ball);
-            
         }
 
         public void FreeExtraBalls()
@@ -88,22 +87,22 @@ namespace Game.Gameplay.World
 
         private void ResumeSpawning()
         {
-            resumed = true;
+            _resumed = true;
             StartCoroutine(StartSpawningCoroutine());
         }
 
         private IEnumerator StartSpawningCoroutine()
         {
-            while (resumed)
+            while (_resumed)
             {
                 SpawnBall();
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSeconds(0.8f);
             }
         }
 
         private void PauseSpawning()
         {
-            resumed = false;
+            _resumed = false;
             _activeBalls.ForEach(ball => ball.ForceExplode());
         }
         

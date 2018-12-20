@@ -7,40 +7,56 @@ namespace Game.Gameplay.Overlay
 {
     public class OverlayScreen : Screen
     {
-        public int Score { get; set; }
-        public int TimeLeftSeconds { get; set; }
 
+        [Header("Overlay")]
         public Text TimerText;
         public Text ScoreText;
 
-        public Button MenuButton;
+        [Header("Finish Panel")]
+        public Text FinalScoreText;
+        public Text EfficiencyText;
+        public Button DoneButton;
+        public Color BadColor;
+        public Color NormalColor;
+        public Color GoodColor;
 
         private Router _router;
-        private GameSession _gameSession;
+        private GameSession _session;
         private Animator _animator;
 
         [Inject]
         private void InjectDependencies(Router router, GameSession gameSession)
         {
             _router = router;
-            _gameSession = gameSession;
+            _session = gameSession;
         }
 
         private void Awake()
         {
             _animator = GetComponent<Animator>();
             
-            _gameSession.OnTimerProgressChanged += _ => UpdateTimerText(_gameSession.TimeLeftSeconds);
-            _gameSession.OnScoreChanged += UpdateScoreText;
-            _gameSession.OnFinish += () => _animator.SetTrigger("Finish");
+            _session.OnTimerProgressChanged += _ => UpdateTimerText(_session.TimeLeftSeconds);
+            _session.OnScoreChanged += UpdateScoreText;
+            _session.OnFinish += () => SetFinishState();
             
-            MenuButton.onClick.AddListener(() => { _router.ToMenu(); });
+            DoneButton.onClick.AddListener(() =>
+            {
+                if (_session.EfficiencyPercentages == 100)
+                {
+                    // С:<
+                    Application.OpenURL("https://spb.hh.ru/resume/b7302605ff059d71210039ed1f553357686745");
+                }
+                else
+                {
+                    StartTransitionToRestart();
+                }
+            });
         }
 
         private void Start()
         {
-            UpdateTimerText(_gameSession.TimeLeftSeconds);
-            UpdateScoreText(_gameSession.Score);
+            UpdateTimerText(_session.TimeLeftSeconds);
+            UpdateScoreText(_session.Score);
         }
 
         private void UpdateTimerText(int secondsLeft)
@@ -51,6 +67,37 @@ namespace Game.Gameplay.Overlay
         private void UpdateScoreText(int score)
         {
             ScoreText.text = score.ToString();
+        }
+
+        private void SetFinishState()
+        {
+            FinalScoreText.text = _session.Score.ToString();
+            var effeciency = _session.EfficiencyPercentages;
+            EfficiencyText.text = effeciency.ToString() + "%";
+            if (effeciency <= 70)
+            {
+                EfficiencyText.color = BadColor;
+            } else if (effeciency <= 99)
+            {
+                EfficiencyText.color = NormalColor;
+            } else if (effeciency == 100)
+            {
+                EfficiencyText.color = GoodColor;
+                DoneButton.GetComponent<Image>().color = GoodColor;
+                DoneButton.GetComponentInChildren<Text>().text = "ОТПРАВИТЬ ОФФЕР";
+            }
+            _animator.SetTrigger("finish");
+        }
+
+        private void StartTransitionToRestart()
+        {
+            _animator.SetTrigger("fade_out");
+        }
+
+        // called from Animation by Animation Event
+        private void FadeOutAnimationFinished()
+        {
+            _router.ResetCurrentScene();
         }
         
     }

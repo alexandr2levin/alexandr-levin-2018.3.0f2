@@ -11,6 +11,7 @@ namespace Game.Gameplay
     {
         public int Score { private set; get; }
 
+        public int TargetScore;
         public int TimeLeftSeconds;
 
         public float Progress
@@ -19,6 +20,17 @@ namespace Game.Gameplay
             {
                 if (_timeTotalSeconds == -1) return 0f;
                 return 1f - (float) TimeLeftSeconds / (float) _timeTotalSeconds;
+            }
+        }
+
+        public int EfficiencyPercentages
+        {
+            get
+            {
+                var efficiency = (float) Score / (float) TargetScore;
+                if (efficiency > 1f) efficiency = 1f;
+                var percentages = Mathf.FloorToInt(efficiency * 100);
+                return percentages;
             }
         }
 
