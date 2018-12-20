@@ -8,12 +8,14 @@ namespace Game
         
         public void ToMenu()
         {
-            SceneManager.LoadScene("Game/Menu/Menu");
+            Debug.Log("To menu");
+            //SceneManager.LoadScene("Game/Menu/Menu");
         }
 
         public void ToGameplay()
         {
-            SceneManager.LoadScene("Game/Gameplay/Gameplay");
+            Debug.Log("To gameplay");
+            //SceneManager.LoadScene("Game/Gameplay/Gameplay");
         }
     }
 }

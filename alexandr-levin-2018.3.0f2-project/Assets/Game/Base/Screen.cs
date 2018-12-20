@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace Game.Base
 {
-    public class Screen<TView, TPresenter> where TView : IView where TPresenter : Presenter<TView>
+    public class Screen : MonoBehaviour
     {
-        protected TPresenter Presenter;
+        
     }
 }

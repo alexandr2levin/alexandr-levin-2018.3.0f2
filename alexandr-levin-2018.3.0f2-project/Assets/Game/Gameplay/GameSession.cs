@@ -9,46 +9,69 @@ namespace Game.Gameplay
 {
     public class GameSession : MonoBehaviour
     {
-        public int Score;
+        public int Score { private set; get; }
 
         public int TimeLeftSeconds;
 
-        public event Action<int> OnTimeLeftChanged;
+        public float Progress
+        {
+            get
+            {
+                if (_timeTotalSeconds == -1) return 0f;
+                return 1f - (float) TimeLeftSeconds / (float) _timeTotalSeconds;
+            }
+        }
 
+        public event Action OnBegin;
+        public event Action OnFinish;
+        
+        public event Action<float> OnTimerProgressChanged;
+        public event Action<int> OnScoreChanged;
+
+        private int _timeTotalSeconds = -1;
         private bool _sessionRunning = false;
 
         public void ChangeScore(int delta)
         {
+            if (!_sessionRunning) return;
             Score += delta;
+            OnScoreChanged?.Invoke(Score);
         }
         
         private void Start()
         {
-            StartSession();
+            Application.targetFrameRate = 60;
+            BeginSession();
         }
 
-        private void StartSession()
+        private void BeginSession()
         {
             _sessionRunning = true;
-            StartCoroutine(StartCountdown());
+            _timeTotalSeconds = TimeLeftSeconds;
+            StartCoroutine(BeginSessionCoroutine());
         }
         
-        private IEnumerator StartCountdown()
+        private IEnumerator BeginSessionCoroutine()
         {
+            // wait some time before starting the game
+            // to let user understand the UI
+            yield return new WaitForSeconds(3.0f);
+            OnBegin?.Invoke();
+            
             while (TimeLeftSeconds > 0)
             {
                 yield return new WaitForSeconds(1.0f);
                 TimeLeftSeconds -= 1;
-                OnTimeLeftChanged?.Invoke(TimeLeftSeconds);
+                OnTimerProgressChanged?.Invoke(Progress);
             }
-            
-            OnTimeLeftChanged?.Invoke(0);
+            OnTimerProgressChanged?.Invoke(Progress);
             FinishSession();
         }
 
         private void FinishSession()
         {
             _sessionRunning = false;
+            OnFinish?.Invoke();
         }
     }
 }

@@ -5,9 +5,12 @@ namespace Game.Gameplay
 {
     public class GameplayInstaller : MonoInstaller
     {
+
+        public GameSession GameSession;
+        
         public override void InstallBindings()
         {
-            // TODO
+            Container.BindInstance(GameSession);
         }
     }
 }
