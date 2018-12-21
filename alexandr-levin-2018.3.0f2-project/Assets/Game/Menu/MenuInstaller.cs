@@ -1,19 +1,18 @@
 using Game.Base;
-using UnityEngine;
 using Zenject;
 
-namespace Game.Gameplay
+namespace Game.Menu
 {
-    public class GameplayInstaller : MonoInstaller
+    public class MenuInstaller : MonoInstaller
     {
 
-        public GameSession GameSession;
         public AudioPlayer AudioPlayer;
+        public MenuAudioController MenuAudioController;
         
         public override void InstallBindings()
         {
-            Container.BindInstance(GameSession);
             Container.BindInstance(AudioPlayer);
+            Container.BindInstance(MenuAudioController);
         }
     }
 }

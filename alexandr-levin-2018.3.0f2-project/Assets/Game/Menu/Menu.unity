@@ -397,6 +397,7 @@ GameObject:
   m_Component:
   - component: {fileID: 274938058}
   - component: {fileID: 274938057}
+  - component: {fileID: 274938059}
   m_Layer: 0
   m_Name: Scene Context
   m_TagString: Untagged
@@ -417,7 +418,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
-  _monoInstallers: []
+  _monoInstallers:
+  - {fileID: 274938059}
   _installerPrefabs: []
   _autoRun: 1
   _parentNewObjectsUnderSceneContext: 0
@@ -437,6 +439,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &274938059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 274938056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 951c431ba5d6484a9c05b5a5d1a67789, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AudioPlayer: {fileID: 1242968302}
+  MenuAudioController: {fileID: 949505299}
 --- !u!1 &704465972
 GameObject:
   m_ObjectHideFlags: 0
@@ -680,12 +696,13 @@ GameObject:
   m_Component:
   - component: {fileID: 949505296}
   - component: {fileID: 949505298}
+  - component: {fileID: 949505299}
   - component: {fileID: 949505295}
   - component: {fileID: 949505294}
   - component: {fileID: 949505293}
   - component: {fileID: 949505297}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Menu Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -804,6 +821,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayButton: {fileID: 106850123}
+--- !u!114 &949505299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 949505292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bc97b0a6c024ecb8ab7211ba77008f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Clip: {fileID: 8300000, guid: abb867180c71b439caa06b1fd594f5f6, type: 3}
 --- !u!1 &1134460487
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,6 +940,7 @@ GameObject:
   - component: {fileID: 1242968301}
   - component: {fileID: 1242968300}
   - component: {fileID: 1242968299}
+  - component: {fileID: 1242968302}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -981,6 +1012,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1242968302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242968298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a6c8ff45c64ff185146150f1177b3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2023085547
 GameObject:
   m_ObjectHideFlags: 0

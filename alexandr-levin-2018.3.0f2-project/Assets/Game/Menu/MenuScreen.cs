@@ -15,13 +15,15 @@ namespace Game.Menu
         public Button PlayButton;
         
         private Router _router;
+        private MenuAudioController _menuAudioController;
 
         private Animator _animator;
 
         [Inject]
-        private void InjectDependencies(Router router)
+        private void InjectDependencies(Router router, MenuAudioController menuAudioController)
         {
             _router = router;
+            _menuAudioController = menuAudioController;
         }
 
         private void Awake()
@@ -32,6 +34,7 @@ namespace Game.Menu
 
         private void StartTransitionToGameplay()
         {
+            _menuAudioController.StopMusic();
             _animator.SetTrigger("to_gameplay");
         }
 
