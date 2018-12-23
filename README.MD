@@ -6,7 +6,7 @@
 
 ## Скачать
 
-[Windows](https://github.com/alexandr2levin/alexandr-levin-2018.3.0f2/releases/download/1.0/alexandr-levin-2018.3.0f2-win.zip)
+[Windows / 1.0.1](https://github.com/alexandr2levin/alexandr-levin-2018.3.0f2/releases/download/1.0.1/alexandr-levin-2018.3.0f2-win.zip)
 
 ## Дополнительные материалы
 
